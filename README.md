@@ -16,7 +16,7 @@ In my experiment, Inspect to evaluate GPT-4o-mini’s multihop reasoning skills 
 
 Each question was tested under two conditions:
 
-1. **Without Chain-of-Thought (CoT):** The model was prompted with the question alone, requiring it to generate an answer without explicitly breaking down its reasoning.
+1. **Without Chain-of-Thought (CoT):** The model was prompted with the question alone and a system prompt asking it to just spit out the answer, requiring it to generate an answer without explicitly breaking down its reasoning.
 2. **With Chain-of-Thought (CoT):** The model was prompted to articulate its reasoning step-by-step before arriving at a final answer.
 
 I ran three trials for each condition, then compiled & analyzed the resultant logs!
@@ -25,9 +25,9 @@ I ran three trials for each condition, then compiled & analyzed the resultant lo
 
 | Condition | Trial | Q1 | Q2 | Q3 | Q4 | Q5 | Avg. Score |
 |-----------|-------|----|----|----|----|----|------------|
-| – CoT     | T1    | ✓  | ✓  |    | ✓  |    | 0.60       |
-|           | T2    | ✓  | ✓  |    | ✓  |    |            |
-|           | T3    | ✓  | ✓  |    | ✓  |    |            |
+| – CoT     | T1    |    |    |    | ✓  |    | 0.33       |
+|           | T2    |    | ✓  |    | ✓  |    |            |
+|           | T3    | ✓  |    |    | ✓  |    |            |
 | + CoT     | T1    | ✓  | ✓  |    | ✓  |    | 0.53       |
 |           | T2    | ✓  | ✓  |    |    | ✓  |            |
 |           | T3    | ✓  | ✓  |    |    |    |            |
@@ -36,11 +36,13 @@ Interestingly, neither model was able to solve Question 3. I dive more deeply in
 
 ## Discussion: Overall Performance
 
-The observed performance metrics clearly demonstrate a surprising consequence of CoT reasoning on GPT-4o-mini’s multihop reasoning capabilities. Intriguingly, while CoT has been posited to enrich model reasoning through structural clarity, the results reveal a counterintuitive consequence: the model performed suboptimally when explicitly detailing its thought process.
+The observed performance metrics make it pretty clear—Chain-of-Thought (CoT) reasoning gives GPT-4o-mini a solid edge when it comes to multihop reasoning. This fits right in with past research showing that CoT prompting helps large language models (LLMs) handle complex reasoning tasks more effectively.
 
-One potential explanation involves the cognitive load imposed on the model during the CoT phase. As it articulated its reasoning, it may have become sidetracked, focusing on the mechanics of reasoning rather than the logical progression necessary to answer the questions accurately. This aligns with cognitive psychology principles where breaking down a complex task can introduce errors if the components are not managed properly.
+FFor instance, Wei et al. (2022) demonstrated that CoT prompting significantly improves LLMs' abilities to perform multi-step reasoning by generating intermediate reasoning steps, leading to more accurate solutions. Similarly, Wang et al. (2022) found that CoT prompting enhances both the final answer accuracy and the faithfulness of the reasoning process in LLMs. These studies suggest that prompting models to articulate their thought processes step-by-step enables them to navigate complex, multihop inference tasks more effectively.
 
-Another limitation is the sample size. In efforts to keep my expenditure on API calls low, I artificially constrained the dataset to n = 5, making it difficult — even with multiple trials — to accurately assess the relationship between CoT and multihop reasoning.
+In our evaluation, GPT-4o-mini exhibited improved performance when employing CoT prompting, corroborating these findings. The model's ability to explicitly articulate its reasoning likely facilitated better navigation through the logical connections necessary for multihop inference. This enhancement underscores the utility of structured reasoning prompts in bolstering the problem-solving capabilities of LLMs.
+
+One huge limitation of my experiment, however, is the sample size. In efforts to keep my expenditure on API calls low, I artificially constrained the dataset to n = 5, making it difficult — even with multiple trials — to accurately assess the relationship between CoT and multihop reasoning.
 
 I plan on revamping my current analysis very soon (a.k.a. after my linear algebra midterm) with much more analysis — as well as additional solving techniques other than CoT. I’m particularly interested in the `self_critique()` filter: I’m curious how the model can self-iterate on its own response to deliver hopefully-better-than-average performance!
 
@@ -65,4 +67,4 @@ The data I selected includes many lines of context to give the model the informa
 
 **Question 3** stumped GPT-4o-mini across the board. I think it's because it requires a unique combination of symbolic and arithmetic reasoning — as well as a complicated reverse function that in general heightens complexity, particularly for a model not optimized for multi-step numerical transformations. LLMs were initially designed to identify patterns within text, not mathematical calculations, and although this capability is growing fast, it may still lag behind when faced with tasks that involve multiple layers of not-just-math-related logic.
 
-Only one trial was able to answer **Question 5**. According to MoreHopQA, this one actually only contains the arithmetic reasoning type, so at first glance, poor performance doesn’t make total sense. Ultimately, I think LLMs just sort of…suck with prime numbers. The distribution of prime numbers is irregular and unpredictable, making it hard for an LLM to learn patterns based on the sparse (and non-probabilistic) prime-number-related data it’s been exposed to.
+Only one trial on the CoT model was able to answer **Question 5**. According to MoreHopQA, this one actually only contains the arithmetic reasoning type, so at first glance, poor performance doesn’t make total sense. Ultimately, I think LLMs just sort of…suck with prime numbers. The distribution of prime numbers is irregular and unpredictable, making it hard for an LLM to learn patterns based on the sparse (and non-probabilistic) prime-number-related data it’s been exposed to.
