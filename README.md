@@ -1,12 +1,14 @@
 # Reasoning at Depth: Direct ⇨ Chain‑of‑Thought ⇨ Reasoner + Verifier  
-*A MuSiQue‑Ans case study on multihop QA* [^MuSiQue]
+*A MuSiQue‑Ans[^MuSiQue] case study on multihop QA*
 
 ---
 
 ## 1 Why do this at all?
 
 Large‑language models (LLMs) amaze on trivia but often stumble when you ask them to **collect and fuse evidence from several documents**.  
+
 Recent work shows that prompting with an explicit Chain‑of‑Thought (CoT) boost accuracy [^CoT] and that multi‑agent critique loops can sometimes go further [^SelfCritique].  
+
 Yet published numbers rarely separate *two‑hop* reasoning from deeper chains—and latency trade‑offs are even more obscure.
 
 Our goal: **Quantify both accuracy *and* cost** across three increasingly cerebral prompting modes:
