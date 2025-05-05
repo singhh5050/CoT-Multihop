@@ -49,12 +49,12 @@ We tested on **MuSiQue‑Ans** (2 – 4‑hop, Wikipedia) to see where each tact
 
 ## 3 Experiment recipe
 
-```text
-Dataset : MuSiQue‑Ans (2 documents → 4 documents)
-Sample  : 100 questions (balanced)
-LLM     : gpt‑4o, T=0
-Metrics : EM, token‑F1, avg latency, F1/sec
-```
+| **Component** | **Details** |
+|---------------|-------------|
+| **Dataset**   | *MuSiQue-Ans* (2 documents → 4 documents) |
+| **Sample**    | 100 questions, balanced across 2-, 3-, and 4-hop |
+| **Model**     | `gpt-4o` with temperature `T = 0` |
+| **Metrics**   | Exact Match (EM), Token-level F1, Average Latency, F1 per Second (Efficiency) |
 
 ---
 
@@ -81,9 +81,9 @@ MuSiQue serves a **healthy diet of depth**—half of our evaluation is genuine 3
 
 | Hop Count | Direct Answer | Single-agent CoT | Reasoner–Verifier |
 |-----------|----------------|------------------|--------------------|
-| **2-hop** | ✅ CoT crushes baseline | ❌ RV adds no value | 📉 Overcomplicates simple cases |
-| **3-hop** | 🔻 Everyone dips | ✅ CoT still edges out | ⚖️ Matches CoT with higher cost |
-| **4-hop** | ⚖️ CoT and Direct tie | ✅ RV overtakes with +5 pp F1 | 🚀 Shines where others fail |
+| **2-hop** | 🔻 Baseline performance | ✅ Crushes baseline | 📉 Overcomplicates simple cases |
+| **3-hop** | 🔻 Performance dips | ✅ CoT still edges out | ⚖️ Matches CoT with higher cost |
+| **4-hop** | ⚖️ Struggles with complexity | ⚖️ Ties with Direct | 🚀 Shines where others fail |
 
 ![Performance by Hop](visualizations/performance_by_hop.png)
 
