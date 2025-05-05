@@ -1,5 +1,5 @@
 # Reasoning at Depth: Direct ⇨ Chain‑of‑Thought ⇨ Reasoner + Verifier  
-*A MuSiQue‑Ans case study on multihop QA*
+*A MuSiQue‑Ans case study on multihop QA* [^MuSiQue]
 
 ---
 
@@ -21,6 +21,7 @@ We tested on **MuSiQue‑Ans** (2 – 4‑hop, Wikipedia) to see where each tact
 
 [^CoT]: Wei *et al.* "Chain‑of‑Thought Prompting…", NeurIPS 2022  
 [^SelfCritique]: Madaan *et al.* "Self‑Refine: Self‑Improving LLMs via Chains of Thought", arXiv 2023
+[^MuSiQue]: Lightman & Wolf, "MuSiQue: Multi‑Scale Question Answering", ACL 2023
 
 ---
 
@@ -39,10 +40,10 @@ We tested on **MuSiQue‑Ans** (2 – 4‑hop, Wikipedia) to see where each tact
 | **Statistical significance** | Calculates 95% confidence intervals to provide context for performance differences. |
 | **Efficiency metrics** | Measures F1-per-second to quantify the practical tradeoff between accuracy and latency. |
 
-> **Pain points while building:**
-> 1. Handled exceptions from Hugging Face's streaming loader when processing malformed examples.
-> 2. Modified the `BaseChatAgent` implementation to properly handle system messages via `SystemMessage` injection.
-> 3. Adjusted confidence interval visualization to prevent negative lower bounds in the plots.
+**Pain points while building:**
+1. Handled exceptions from Hugging Face's streaming loader when processing malformed examples.
+2. Modified the `BaseChatAgent` implementation to properly handle system messages via `SystemMessage` injection.
+3. Adjusted confidence interval visualization to prevent negative lower bounds in the plots.
 
 ---
 
@@ -80,15 +81,15 @@ MuSiQue serves a **healthy diet of depth**—half of our evaluation is genuine 3
 
 | Hop Count | Direct Answer | Single-agent CoT | Reasoner–Verifier |
 |-----------|----------------|------------------|--------------------|
-| **2-hop** | ✅ CoT crushes baseline | ❌ RV adds no value |
-| **3-hop** | 🔻 Everyone dips | ✅ CoT still edges out |
-| **4-hop** | ⚖️ CoT and Direct tie | ✅ RV overtakes with +5 pp F1 |
+| **2-hop** | ✅ CoT crushes baseline | ❌ RV adds no value | 📉 Overcomplicates simple cases |
+| **3-hop** | 🔻 Everyone dips | ✅ CoT still edges out | ⚖️ Matches CoT with higher cost |
+| **4-hop** | ⚖️ CoT and Direct tie | ✅ RV overtakes with +5 pp F1 | 🚀 Shines where others fail |
 
 ![Performance by Hop](visualizations/performance_by_hop.png)
 
 **Interpretation:**  
-> Step‑by‑step thinking buys you up to 3 hops.  
-> Past that, you need an explicit self‑critique to fix compounding errors.
+Step‑by‑step thinking buys you up to 3 hops.  
+Past that, you need an explicit self‑critique to fix compounding errors.
 
 ### ⏱️ Figure 4 — Time is money
 
@@ -100,15 +101,15 @@ MuSiQue serves a **healthy diet of depth**—half of our evaluation is genuine 3
 
 ![Latency by Hop](visualizations/latency_by_hop.png)
 
-> RV at 4‑hop is **12× slower** than Direct.  
-> That's a price you'll only pay if you **really need those extra six F1 points**.
+RV at 4‑hop is **12× slower** than Direct.  
+That's a price you'll only pay if you **really need those extra six F1 points**.
 
 ### ⚖️ Figure 5 — Efficiency frontier
 
 ![Performance Latency Tradeoff](visualizations/performance_latency_tradeoff.png)
 
 - Sloped gray iso‑lines represent **constant F1-per-second**.
-- CoT at 2‑hop lies on the **best efficiency curve (~14 F1/s)**.
+- CoT at 2‑hop lies on the **best efficiency curve (~14 F1/s)**.
 - RV points drift **down and to the right**—accuracy improves modestly, but efficiency drops sharply.
 
 ---
@@ -139,11 +140,3 @@ MuSiQue serves a **healthy diet of depth**—half of our evaluation is genuine 3
 
 - **Energy profiling:**  
   Swap GPT‑4o with an **on-device model** and track **FLOPs + power use**.
-
----
-
-## 📚 References
-
-- Wei et al., [Chain‑of‑Thought Prompting](https://arxiv.org/abs/2201.11903), NeurIPS 2022  
-- Lightman & Wolf, [MuSiQue: Multi‑Scale Question Answering](https://aclanthology.org/2023.acl-long.69/), ACL 2023  
-- Madaan et al., [Self‑Refine](https://arxiv.org/abs/2303.17651), 2023
